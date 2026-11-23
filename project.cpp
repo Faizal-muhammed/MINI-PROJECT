@@ -1,100 +1,158 @@
-#include<iostream>
+#include <iostream>
 using namespace std;
-    void readMarks(int marks[] , int n)
-    {
-        for(int i=0; i<n; i++)
-        {
-            cout<<"Student "<<i+1<<": ";
-            cin>>marks[i];
-        }
-    }
-    int findTotal(int marks[],int n)
-    {
-        int total=0;
-        for(int i=0; i<n; i++)
-        {
-            total += marks[i];
-        }
-        return total;
-    }
-    double findAverage(int marks[],int n)
-    {
-        double total = findTotal(marks, n);
-        return total / n;
-    }
-    int findHighest(int marks[], int n)
-    {
-        int highest = marks[0];
-        for(int i = 1; i < n; i++)
-        {
-            if(marks[i] > highest)
-            {
-                highest = marks[i];
-            }
 
-        }
-        return highest;
-    }
-    int findLowest(int marks[], int n)
-    {
-        int lowest = marks[0];
-        for(int i = 1; i < n; i++)
-        {
-            if(marks[i] < lowest)
-            {
-                lowest = marks[i];
-            }
-        }
-        return lowest;
-    }
-    int countPassed(int marks[], int n)
-    {
-        int passed = 0;
-        for(int i = 0; i < n; i++)
-        {
-            if(marks[i] >= 40)
-            {
-                passed++;
-            }
-        }
-        return passed;
-    }
-    void printReport(int marks[], int n)
-    {
-        int total = findTotal(marks, n);
-        double average = findAverage(marks, n);
-        int highest = findHighest(marks, n);
-        int lowest = findLowest(marks, n);
-        int passed = countPassed(marks, n);
-        int failed = n - passed;
+class Student
+{
+private:
+    int rollNo;
+    string name;
+    float marks;
 
-        cout << "\n===== STUDENT REPORT =====\n";
-        cout << "Total: " << total << endl;
-        cout << "Average: " << average << endl;
-        cout << "Highest: " << highest << endl;
-        cout << "Lowest: " << lowest << endl;
-        cout << "Passed: " << passed << endl;
-        cout << "Failed: " << failed << endl;
-    }
-    int main()
+public:
+
+    // Parameterized Constructor
+    Student(int r, string n, float m)
     {
-        int marks[100];
-        int n;
-        char choice;
-        do
-        {
-            cout<<"Enter the number of students: ";
-            cin>>n;
-            while(n<1 || n>100)
-            {
-                cout<<" Invalid number.";
-                cin>>n;
-            }
-            cout<<"Enter The Mark of ";
-            readMarks(marks, n);
-            printReport(marks, n);
-            cout << "Do you want to analyze again? (y/n): ";
-            cin >> choice;
-        } while(choice == 'y' || choice == 'Y');
-        return 0;
+        rollNo = r;
+        name = n;
+        marks = 0;
+        setMarks(m);
     }
+
+    // Getter Functions
+    int getRollNo()
+    {
+        return rollNo;
+    }
+
+    string getName()
+    {
+        return name;
+    }
+
+    float getMarks()
+    {
+        return marks;
+    }
+
+    // Set Marks with Validation
+    void setMarks(float m)
+    {
+        if (m >= 0 && m <= 100)
+        {
+            marks = m;
+        }
+        else
+        {
+            cout << "Invalid Marks! Marks must be between 0 and 100." << endl;
+        }
+    }
+
+    // Display Function
+    void display()
+    {
+        cout << "\nRoll Number: " << rollNo;
+        cout << "\nName: " << name;
+        cout << "\nMarks: " << marks;
+    }
+};
+
+// Function accepting an object
+void printResult(Student s)
+{
+    cout << "\n\n------ Student Result ------";
+    cout << "\nRoll Number: " << s.getRollNo();
+    cout << "\nName: " << s.getName();
+    cout << "\nMarks: " << s.getMarks();
+
+    if (s.getMarks() >= 40)
+    {
+        cout << "\nResult: PASS";
+    }
+    else
+    {
+        cout << "\nResult: FAIL";
+    }
+
+    cout << "\n----------------------------";
+}
+
+int main()
+{
+    int r1, r2, r3;
+    string n1, n2, n3;
+    float m1, m2, m3;
+
+    cout << "===== STUDENT MANAGEMENT SYSTEM =====\n";
+
+    // Get Student Details
+    cout << "\nEnter Student 1 Details";
+    cout << "\nRoll Number: ";
+    cin >> r1;
+    cout << "Name: ";
+    cin >> n1;
+    cout << "Marks: ";
+    cin >> m1;
+
+    cout << "\nEnter Student 2 Details";
+    cout << "\nRoll Number: ";
+    cin >> r2;
+    cout << "Name: ";
+    cin >> n2;
+    cout << "Marks: ";
+    cin >> m2;
+
+    cout << "\nEnter Student 3 Details";
+    cout << "\nRoll Number: ";
+    cin >> r3;
+    cout << "Name: ";
+    cin >> n3;
+    cout << "Marks: ";
+    cin >> m3;
+
+    // Array of Objects
+    Student batch[3] = {
+        Student(r1, n1, m1),
+        Student(r2, n2, m2),
+        Student(r3, n3, m3)
+    };
+
+    // Display Student Details
+    cout << "\n\n===== STUDENT DETAILS =====";
+
+    for (int i = 0; i < 3; i++)
+    {
+        batch[i].display();
+        cout << endl;
+    }
+
+    // Re-evaluation of Marks
+    int choice;
+    float newMarks;
+
+    cout << "\nEnter Student Number for Re-evaluation (1-3): ";
+    cin >> choice;
+
+    if (choice >= 1 && choice <= 3)
+    {
+        cout << "Enter New Marks: ";
+        cin >> newMarks;
+
+        batch[choice - 1].setMarks(newMarks);
+    }
+    else
+    {
+        cout << "Invalid Student Number!";
+    }
+
+    // Print Final Results
+    cout << "\n\n===== FINAL RESULTS =====";
+
+    for (int i = 0; i < 3; i++)
+    {
+        printResult(batch[i]);
+    }
+
+    return 0;
+}
+    
